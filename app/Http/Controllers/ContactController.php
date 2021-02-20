@@ -15,7 +15,9 @@ class ContactController extends Controller
 
     public function search(Request $request){
         $search = $request->get('search');
-        $contact = Contact::with('contact_numbers')->whereHas('contact_numbers', function($q) use($search){
+        $contact = Contact::where('first_name','like','%'.$search.'%')->orWhere('last_name','like','%'.$search.'%')->get();
+        $contact = Contact::with('contact_numbers')
+            ->whereHas('contact_numbers', function($q) use($search){
                $q->where('contact_numbers.number','like','%'.$search.'%');
                 })
             ->get();
